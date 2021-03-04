@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cinza_escuro"
-    tools:context=".app.view.MainActivity" >
+    android:background="#B7515050"
+    tools:context=".app.view.MainActivity">
 
     <ProgressBar
         android:id="@+id/progressBar"

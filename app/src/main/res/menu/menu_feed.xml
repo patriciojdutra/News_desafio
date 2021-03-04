@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.newsapi.app.view.FeedActivity">
+
+    <item
+        android:id="@+id/action_pesquisar"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:orderInCategory="100"
+        android:title="Pesquisar"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_favorito"
+        android:icon="@drawable/ic_baseline_star_outline_24"
+        android:orderInCategory="100"
+        android:title="Favoritos"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_data"
+        android:icon="@drawable/ic_baseline_calendar_today_24"
+        android:orderInCategory="100"
+        android:title="Favoritos"
+        app:showAsAction="always" />
+
+</menu>
