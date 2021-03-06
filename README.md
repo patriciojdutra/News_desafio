@@ -3,10 +3,16 @@
 ## Como executar o aplicativo?
 
 Para executar o aplicativo, baixe o arquivo apk no link
-[clique aqui para baixar o aplicativo ](https://github.com/patriciojdutra/DesafioJeitto/blob/master/app-desafio-jeitto.apk?raw=true)
+[clique aqui para baixar o aplicativo ](https://github.com/patriciojdutra/News_desafio/blob/main/app-desafio-mesa.apk?raw=true)
  e instale em seu smartphone.
 
 ## Requisitos do aplicativo
+
+1) Tela de Login
+a) O usuário poderá entrar com:
+- Email e Password;
+- Facebook;
+
 
 * A primeira tela do aplicativo contém uma toolbar com título, um campo de pesquisa e a listagem de notícias.
   * Título da tela: Notícias
