@@ -39,6 +39,18 @@ Para executar o aplicativo, baixe o arquivo apk no link
    
 5) Tela de Detalhe da notícia
    - a) O usuário poderá visualizar a notícia por uma WebView.
+   - b) O usuário poderá marcar como favorito ou desfavoritar a notícia.
+   
+Requisitos desejáveis:
+  - Atualização das notícias de 30 em 30 segundos.
+  - Pesquisar notícias por títulos na tela de filtro.
+  - Compartilhar notícias.
+
+O que usar:
+  - MVVM / MVP
+  - A utilização de biblioteca de terceiros é permitida.
+  - Swift ou Kotlin
+
       
 [Clique aqui para saber mais sobre o desafio.](https://github.com/patriciojdutra/News_desafio/blob/main/Desafio_Mesa_Mobile.pdf)
 
