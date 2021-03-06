@@ -13,29 +13,31 @@ a) O usuário poderá entrar com:
 - Email e Password;
 - Facebook;
 
-
-* A primeira tela do aplicativo contém uma toolbar com título, um campo de pesquisa e a listagem de notícias.
-  * Título da tela: Notícias
-* Ao entrar na tela, deve ser exibido um loading em tela cheia enquanto os dados não são retornados.
-* Ao entrar na tela, deve ser mostrada uma lista de notícias com no máximo 15 itens retornados da API.
-  * Cada item da lista contém a imagem, título e o nome do site fonte da notícia. (imageUrl, title e newsSite respectivamente)
-* Ao chegar no fim da lista, é feita uma paginação, realizando uma nova requisição a API e carregando mais 15 itens.
-* O campo de pesquisa suporta no máximo 10 caracteres.
-  * Ao digitar no campo de pesquisa, deve ser feita uma filtragem nos títulos dos itens já carregados, fazendo com que a lista mostre somente os itens cujo os títulos contenham o conteúdo digitado no campo.
-  * Ao apagar todo o conteúdo do campo de pesquisa, devem ser exibidos todos os itens carregados anteriormente.
-* Ao clicar em uma notícia, é apresentado um Dialog com os detalhes e as opções Voltar e Ler artigo
-  * O Dialog contém o título, sumário e imagem da notícia. (title, summary e imageUrl respectivamente)
-  * Ao clicar em Voltar ou ao clicar fora do Dialog, o mesmo é fechado.
-  * Ao clicar em Ler artigo, deve ser aberto o navegador padrão do dispositivo no link contido no campo url retornado pela API.
-Fluxos alternativos
-* Caso a API retorne um erro (HTTP 4xx ou 5xx), deve ser exibido um dialog de erro.
-  * Título: Não foi possível carregar as notícias
-  * Mensagem: De acordo com o campo message do retorno de erro.
-  * Botões:
-      * OK: O aplicativo é fechado.
-      
- **Design das telas**
- ![](https://github.com/patriciojdutra/DesafioJeitto/blob/master/Screenshot_1.png)
+2) Tela de Cadastro
+a) O usuário poderá cadastrar:
+- Nome
+- E-mail
+- Senha
+- Confirmação de senha
+- Data de Nascimento (Opcional)
+3) Tela de Feed
+a) O usuário irá visualizar no topo da tela, um carrossel das notícias em
+destaques;
+b) O usuário irá visualizar uma listagem corrida com as notícias, ordenadas
+pela data de publicação;
+c) O usuário poderá salvar como favorito a notícia desejada;
+d) Cada notícia deve conter:
+i) Imagem;
+ii) Título (Máximo de 2 linhas)
+iii) Descrição (Máximo de 2 linhas)
+iv) Botão para favoritar/desfavoritar
+e) O usuário só vai poder acessar a tela de Feed autenticado
+4) Tela de Filtros
+a) O usuário poderá filtrar as notícias por:
+i) Data;
+ii) Favoritos;
+5) Tela de Detalhe da notícia
+a) O usuário poderá visualizar a notícia por uma WebView.
       
 [Clique aqui para saber mais sobre o desafio.](https://github.com/Jeitto/Android-Challenge/)
       
