@@ -40,7 +40,7 @@ Para executar o aplicativo, baixe o arquivo apk no link
 5) Tela de Detalhe da notícia
    a) O usuário poderá visualizar a notícia por uma WebView.
       
-[Clique aqui para saber mais sobre o desafio.](https://github.com/Jeitto/Android-Challenge/)
+[Clique aqui para saber mais sobre o desafio.](https://github.com/patriciojdutra/News_desafio/blob/main/Desafio_Mesa_Mobile.pdf)
       
       
 ## Resultado das telas
