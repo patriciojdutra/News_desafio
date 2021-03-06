@@ -60,7 +60,13 @@ dependencies {
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    //carrossel
     implementation 'com.github.jama5262:CarouselView:1.1.0'
+
+    //facebook
+    implementation 'com.facebook.android:facebook-android-sdk:5.11.2'
+
+    //carrossel
+    implementation 'com.github.smarteist:autoimageslider:1.4.0'
+
 
 }

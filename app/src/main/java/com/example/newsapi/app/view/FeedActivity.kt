@@ -3,47 +3,73 @@ package com.example.newsapi.app.view
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.SearchView
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapi.R
-import com.example.newsapi.app.model.DetalheNoticiaModel
 import com.example.newsapi.app.model.NoticiaModel
 import com.example.newsapi.app.util.Alerta
+import com.example.newsapi.app.util.PreferencesUtil
 import com.example.newsapi.app.viewmodel.FeedViewModel
+import com.patricio.dutra.desafiojeitto.utils.Constants
+import com.smarteist.autoimageslider.SliderAnimations
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_feed.*
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.concurrent.fixedRateTimer
 
 class FeedActivity : AppCompatActivity() {
 
     private lateinit var adapter: RecyclerAdapter
+    private lateinit var adapterBanner: BannerAdapter
     private lateinit var iconeFavorito: MenuItem
     private var filtroFavorito = false
+    private var carregarNoticiasAutomatico = true
     private val viewModel: FeedViewModel by viewModels()
     val act = this
+
+    companion object {
+
+        var listaFavoritos = ArrayList<NoticiaModel>()
+
+        @JvmStatic
+        fun clearListNews(lista: ArrayList<NoticiaModel>, listaFavoritos: ArrayList<NoticiaModel>): ArrayList<NoticiaModel>{
+            for(noticia in listaFavoritos){
+                lista.removeAll { n -> n.title == noticia.title && n.description == noticia.description }
+            }
+            lista.addAll(0, listaFavoritos)
+            return lista
+        }
+
+        @JvmStatic
+        fun addNews(news: NoticiaModel){
+            listaFavoritos.add(0, news)
+        }
+
+        @JvmStatic
+        fun removeNews(news: NoticiaModel){
+            listaFavoritos.removeAll { n -> n.title == news.title && n.description == news.description }
+        }
+
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed)
 
         observes()
-        viewModel.buscarNoticiasDestaques()
-        viewModel.buscarNoticias()
         filtroPesquisaPorTitulo()
-
+        viewModel.buscarNoticiasDestaques(PreferencesUtil.getString(this,"token",""))
+        buscarNoticiaPorTempo()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -91,60 +117,26 @@ class FeedActivity : AppCompatActivity() {
 
     }
 
-    fun carregarNoticiasDestaques(lista: ArrayList<NoticiaModel>){
+    fun carregarNoticiasDestaques(noticiasDestaques: ArrayList<NoticiaModel>){
 
+        val listaFavoritosDestaque = listaFavoritos.filter { n -> n.eCarrossel == true } as ArrayList<NoticiaModel>
+        var lista = clearListNews(noticiasDestaques, listaFavoritosDestaque)
 
-        carrossel.apply {
-            size = lista.size
-            setCarouselViewListener { view, position ->
-
-                val titulo = view.findViewById<TextView>(R.id.txtTitulo)
-                titulo.setText(lista[position].title)
-
-                val descricao = view.findViewById<TextView>(R.id.txtDescricao)
-                descricao.setText(lista[position].description)
-
-                val btnFavorito = view.findViewById<ImageButton>(R.id.btnFavorito)
-                btnFavorito.setOnClickListener {
-                    if(lista[position].eFavorito){
-                        lista[position].eFavorito = false
-                        viewModel.listaNoticiasDestaques.value?.get(position)?.eFavorito = false
-                        btnFavorito.setImageResource(android.R.drawable.btn_star_big_off)
-                    }else{
-                        lista[position].eFavorito = true
-                        viewModel.listaNoticiasDestaques.value?.get(position)?.eFavorito = true
-                        btnFavorito.setImageResource(android.R.drawable.btn_star_big_on)
-                    }
-                }
-
-                if(lista[position].eFavorito)
-                    btnFavorito.setImageResource(android.R.drawable.btn_star_big_on)
-                else
-                    btnFavorito.setImageResource(android.R.drawable.btn_star_big_off)
-
-                val imageView = view.findViewById<ImageView>(R.id.imageView)
-                Picasso.get().load(lista[position].image_url)
-                    .resize(1200, imageView.height)
-                    .centerCrop()
-                    .into(imageView);
-
-                view.setOnClickListener {
-
-                    var detalhe = DetalheNoticiaModel(true,lista[position].url,position,lista[position].eFavorito)
-
-                    var it = Intent(act, DetalheNoticiaActivity::class.java)
-                    it.putExtra("detalhe", detalhe)
-                    startActivityForResult(it,1)
-                }
-
-
-            }
-            show()
+        if(!lista.isNullOrEmpty()) {
+            adapterBanner = BannerAdapter(lista, this)
+            carrossel.setSliderAdapter(adapterBanner)
+            carrossel.startAutoCycle()
+            carrossel.setSliderTransformAnimation(SliderAnimations.ZOOMOUTTRANSFORMATION);
+        }else{
+            adapterBanner = BannerAdapter(ArrayList<NoticiaModel>(), this)
+            carrossel.setSliderAdapter(adapterBanner)
         }
-
     }
 
-    fun carregarNoticias(lista: ArrayList<NoticiaModel>){
+    fun carregarNoticias(noticiasDestaques: ArrayList<NoticiaModel>){
+
+        var lista = clearListNews(noticiasDestaques, listaFavoritos)
+        lista = lista.filter { n -> n.eCarrossel == false } as ArrayList<NoticiaModel>
 
         recyclerView.layoutManager = LinearLayoutManager ( this )
         adapter = RecyclerAdapter(lista, this)
@@ -155,11 +147,18 @@ class FeedActivity : AppCompatActivity() {
     fun filtrarFavoritas(){
 
         filtroFavorito = !filtroFavorito
+        carregarNoticiasAutomatico = !filtroFavorito
 
         if(filtroFavorito){
             iconeFavorito.setIcon(R.drawable.ic_baseline_star_rate_24)
-            var listaDestaqueFavoritas: ArrayList<NoticiaModel> = viewModel.listaNoticiasDestaques.value?.filter { noticia -> noticia.eFavorito == true  } as ArrayList<NoticiaModel>
-            carregarNoticiasDestaques(listaDestaqueFavoritas)
+            var listaDestaqueFavoritas: ArrayList<NoticiaModel> = viewModel.listaNoticiasDestaques.value?.filter {
+                noticia -> noticia.eFavorito == true  } as ArrayList<NoticiaModel>
+
+            if(!listaDestaqueFavoritas.isNullOrEmpty())
+                carregarNoticiasDestaques(listaDestaqueFavoritas)
+            else
+                carregarNoticiasDestaques(ArrayList<NoticiaModel>())
+
             var listaNoticias = adapter.getItensFavoritos()
             carregarNoticias(listaNoticias)
         }else{
@@ -176,6 +175,8 @@ class FeedActivity : AppCompatActivity() {
     fun filtroPesquisaPorTitulo(){
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
             }
@@ -187,10 +188,12 @@ class FeedActivity : AppCompatActivity() {
                     return false
                 }
 
+                filtroFavorito = false
+
                 var listaNoticias = ArrayList<NoticiaModel>()
                 listaNoticias.addAll(viewModel.listaNoticias.value!!)
                 for (item in viewModel.listaNoticias.value!!){
-                    if(!item.title?.contains(newText)!!){
+                    if(!item.title?.contains(newText, true)!!){
                         listaNoticias.remove(item)
                     }
                 }
@@ -199,15 +202,17 @@ class FeedActivity : AppCompatActivity() {
                 var listaNoticiasDestaque = ArrayList<NoticiaModel>()
                 listaNoticiasDestaque.addAll(viewModel.listaNoticiasDestaques.value!!)
                 for (item in viewModel.listaNoticiasDestaques.value!!){
-                    if(!item.title?.contains(newText)!!){
+                    if(!item.title?.contains(newText,true)!!){
                         listaNoticiasDestaque.remove(item)
                     }
                 }
-                carregarNoticiasDestaques(listaNoticias)
+                carregarNoticiasDestaques(listaNoticiasDestaque)
 
                 return false
             }
         })
+
+        //searchView.isIconified
 
     }
 
@@ -221,11 +226,23 @@ class FeedActivity : AppCompatActivity() {
         val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
 
             val sMes = if(monthOfYear < 10) "0${monthOfYear+1}" else "${monthOfYear+1}"
-            viewModel.buscarNoticiasPorData("$year-$dayOfMonth-$sMes")
+            viewModel.buscarNoticiasPorData("$year-$dayOfMonth-$sMes", PreferencesUtil.getString(this,"token",""))
 
         }, year, month, day)
         dpd.show()
 
+    }
+
+    fun buscarNoticiaPorTempo(){
+
+        fixedRateTimer(name = "timer",
+                initialDelay = 1000, period = Constants.TIMENEWS, daemon = true) {
+            runOnUiThread(){
+                if(searchView.query.isEmpty() && carregarNoticiasAutomatico) {
+                    viewModel.buscarNoticias(PreferencesUtil.getString(act, "token", ""))
+                }
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -235,21 +252,17 @@ class FeedActivity : AppCompatActivity() {
 
             try {
 
-                var detalhe = data?.getSerializableExtra("detalhe") as DetalheNoticiaModel
+                if(filtroFavorito)
+                    filtrarFavoritas()
+                else {
+                    var listaNoticiasDestaque = viewModel.listaNoticiasDestaques.value as ArrayList<NoticiaModel>
+                    carregarNoticiasDestaques(listaNoticiasDestaque)
 
-                if(detalhe.highlight){
-                    var lista = viewModel.listaNoticias.value as ArrayList<NoticiaModel>
-                    lista[detalhe.posicao].eFavorito = detalhe.eFavorito
-                    carregarNoticiasDestaques(lista)
-                }else{
-                    var lista = adapter.getLista()
-                    lista[detalhe.posicao].eFavorito = detalhe.eFavorito
-                    adapter.notifyDataSetChanged()
+                    var listaNoticias = viewModel.listaNoticias.value as ArrayList<NoticiaModel>
+                    carregarNoticias(listaNoticias)
                 }
 
             }catch (e:Exception){}
-
         }
     }
-
 }

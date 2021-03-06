@@ -1,6 +1,23 @@
 <resources>
-    <string name="app_name">News API</string>
+    <string name="app_name">Desafio Mesa</string>
+    <string name="tela_feed">Feed</string>
+    <string name="tela_web">Web</string>
     <string name="aviso">Aviso</string>
     <string name="continuar">Continuar</string>
     <string name="hint_searchview">O que deseja encontrar?</string>
+    <string name="facebook_app_id">903499813748651</string>
+    <string name="fb_login_protocol_scheme">fb903499813748651</string>
+    <string name="continuar_conectado_facebook">Dejesa continuar conectado ao facebook?</string>
+    <string name="email_invalid">E-mail inválido!</string>
+    <string name="senha_nao_coincidem">Senhas não coincidem.</string>
+    <string name="email_vazio">E-mail não pode estar vazio!</string>
+    <string name="senha_vazia">Senha não estar vazia!</string>
+    <string name="entrar">Entrar</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="e_mail">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="nome">Nome</string>
+    <string name="confirmacao_da_senha">Confirmação da senha</string>
+    <string name="salvar">Salvar</string>
+
 </resources>

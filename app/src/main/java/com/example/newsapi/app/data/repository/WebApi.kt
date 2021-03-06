@@ -1,14 +1,12 @@
 package com.example.newsapi.app.data.repository
 
-import android.app.Activity
 import com.example.newsapi.app.data.service.Retrofit
 import com.example.newsapi.app.model.CadastroRetorno
 import com.example.newsapi.app.model.LoginRetorno
 import com.example.newsapi.app.model.NoticiasRetorno
-import com.example.newsapi.app.util.Alerta
-import com.example.newsapi.app.util.Global
 import com.example.newsapi.app.util.Resposta
 import com.google.gson.JsonObject
+import com.patricio.dutra.desafiojeitto.utils.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,7 +14,6 @@ import retrofit2.Response
 class WebApi {
 
     companion object {
-
 
         @JvmStatic
         fun logar(json: JsonObject, resposta: Resposta<LoginRetorno>) {
@@ -65,31 +62,9 @@ class WebApi {
         }
 
         @JvmStatic
-        fun buscarNoticias(resposta: Resposta<NoticiasRetorno>) {
+        fun buscarNoticias(token: String, resposta: Resposta<NoticiasRetorno>) {
 
-            val callback = Retrofit().endpoint.buscarNoticias(Global.token)
-
-            callback.enqueue(object : Callback<NoticiasRetorno> {
-
-                override fun onResponse(call: Call<NoticiasRetorno>, response: Response<NoticiasRetorno>) {
-
-                    if (response.isSuccessful && response.body() != null) {
-                        resposta.sucesso(response.body()!!)
-                    } else {
-                        resposta.sucesso(NoticiasRetorno(response.errorBody()?.string().toString()))
-                    }
-                }
-
-                override fun onFailure(result: Call<NoticiasRetorno>, t: Throwable) {
-                    resposta.sucesso(NoticiasRetorno(t.message.toString()))
-                }
-            })
-        }
-
-        @JvmStatic
-        fun buscarNoticiasDestaques(resposta: Resposta<NoticiasRetorno>) {
-
-            val callback = Retrofit().endpoint.buscarNoticiasDestaques(Global.token)
+            val callback = Retrofit().endpoint.buscarNoticias(token, Constants.current_page)
 
             callback.enqueue(object : Callback<NoticiasRetorno> {
 
@@ -109,9 +84,31 @@ class WebApi {
         }
 
         @JvmStatic
-        fun buscarNoticiasPorData(data: String, resposta: Resposta<NoticiasRetorno>) {
+        fun buscarNoticiasDestaques(token: String, resposta: Resposta<NoticiasRetorno>) {
 
-            val callback = Retrofit().endpoint.buscarNoticiasPorData(Global.token, data)
+            val callback = Retrofit().endpoint.buscarNoticiasDestaques(token)
+
+            callback.enqueue(object : Callback<NoticiasRetorno> {
+
+                override fun onResponse(call: Call<NoticiasRetorno>, response: Response<NoticiasRetorno>) {
+
+                    if (response.isSuccessful && response.body() != null) {
+                        resposta.sucesso(response.body()!!)
+                    } else {
+                        resposta.sucesso(NoticiasRetorno(response.errorBody()?.string().toString()))
+                    }
+                }
+
+                override fun onFailure(result: Call<NoticiasRetorno>, t: Throwable) {
+                    resposta.sucesso(NoticiasRetorno(t.message.toString()))
+                }
+            })
+        }
+
+        @JvmStatic
+        fun buscarNoticiasPorData(data: String, token: String, resposta: Resposta<NoticiasRetorno>) {
+
+            val callback = Retrofit().endpoint.buscarNoticiasPorData(token, data)
 
             callback.enqueue(object : Callback<NoticiasRetorno> {
 

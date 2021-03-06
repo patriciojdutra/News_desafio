@@ -40,11 +40,17 @@ class RecyclerAdapter (private val newsList: List<NoticiaModel>, var act: Activi
 
         holder.btnFavorito.setOnClickListener {
             if(newsList[position].eFavorito){
+
                 newsList[position].eFavorito = false
+                FeedActivity.listaFavoritos.removeAll { n -> n.title == newsList[position].title && n.description == newsList[position].description }
                 holder.btnFavorito.setImageResource(android.R.drawable.btn_star_big_off)
+
             }else{
+
                 newsList[position].eFavorito = true
+                FeedActivity.listaFavoritos.add(newsList[position])
                 holder.btnFavorito.setImageResource(android.R.drawable.btn_star_big_on)
+
             }
         }
 
@@ -56,10 +62,8 @@ class RecyclerAdapter (private val newsList: List<NoticiaModel>, var act: Activi
 
         holder.layout.setOnClickListener {
 
-            var detalhe = DetalheNoticiaModel(false,newsList[position].url,position,newsList[position].eFavorito)
-
             var it = Intent(act, DetalheNoticiaActivity::class.java)
-            it.putExtra("detalhe", detalhe)
+            it.putExtra("noticia", newsList[position])
             act.startActivityForResult(it,1)
 
         }

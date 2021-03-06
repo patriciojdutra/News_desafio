@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/vermelho900"
     tools:context=".app.view.FeedActivity">
 
-  <androidx.constraintlayout.widget.ConstraintLayout
+  <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:orientation="vertical"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -18,61 +19,77 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewFeed"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="5"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginBottom="8dp"
+        tools:visibility="visible">
 
       <SearchView
           android:id="@+id/searchView"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="40dp"
           android:layout_margin="8dp"
           android:iconifiedByDefault="false"
           android:queryHint="@string/hint_searchview" />
     </androidx.cardview.widget.CardView>
 
-    <com.jama.carouselview.CarouselView
-        android:id="@+id/carrossel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:carouselOffset="start"
-        app:indicatorAnimationType="scaleDown"
-        app:indicatorSelectedColor="@color/cinza_escuro"
-        app:indicatorUnselectedColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewFeed"
-        app:resource="@layout/carrossel_layout"
-        app:scaleOnScroll="true"
-        app:setAutoPlayDelay="6000" />
+    <LinearLayout
+        android:id="@+id/linearCarrossel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:orientation="vertical">
+
+      <com.smarteist.autoimageslider.SliderView
+          android:id="@+id/carrossel"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@drawable/logo2_200"
+          app:sliderAnimationDuration="1000"
+          app:sliderAutoCycleDirection="back_and_forth"
+          app:sliderAutoCycleEnabled="true"
+          app:sliderIndicatorAnimationDuration="1"
+          app:sliderIndicatorGravity="center_horizontal|bottom"
+          app:sliderIndicatorMargin="16dp"
+          app:sliderIndicatorOrientation="horizontal"
+          app:sliderIndicatorPadding="2dp"
+          app:sliderIndicatorRadius="1.5dp"
+          app:sliderIndicatorSelectedColor="@color/vermelho900"
+          app:sliderIndicatorUnselectedColor="@color/vermelho100"
+          app:sliderScrollTimeInSec="5"
+          app:sliderStartAutoCycle="true" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/carrossel" />
 
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+  </LinearLayout>
 
   <include
       android:id="@+id/loading"
       layout="@layout/include_load"
-      android:visibility="visible"
+      android:visibility="gone"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      tools:visibility="gone" />
-
+      app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

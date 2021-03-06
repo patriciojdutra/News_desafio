@@ -1,6 +1,8 @@
 package com.example.newsapi.app.model
 
-class NoticiaModel{
+import java.io.Serializable
+
+class NoticiaModel: Serializable{
     var title: String = ""
     var description: String = ""
     var content: String = ""
@@ -10,6 +12,7 @@ class NoticiaModel{
     var url: String = ""
     var image_url: String = ""
     var eFavorito = false
+    var eCarrossel = false
 }
 
 

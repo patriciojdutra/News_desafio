@@ -9,7 +9,6 @@ class DetalheNoticiaModel:Serializable{
     var eFavorito = false
 
 
-
     constructor(highlight: Boolean, url: String, posicao: Int, eFavorito: Boolean) {
         this.highlight = highlight
         this.url = url

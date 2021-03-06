@@ -8,4 +8,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="cinza_escuro">#444444</color>
+
+    <color name="vermelho900">#B71C1C</color>
+    <color name="vermelho700">#D32F2F</color>
+    <color name="vermelho500">#F44336</color>
+    <color name="vermelho300">#E57373</color>
+    <color name="vermelho100">#FFCDD2</color>
+
+    <color name="marrom900">#3E2723</color>
+    <color name="marrom700">#5D4037</color>
+    <color name="marrom500">#795548</color>
+    <color name="marrom300">#A1887F</color>
+    <color name="marrom100">#D7CCC8</color>
+
+
 </resources>

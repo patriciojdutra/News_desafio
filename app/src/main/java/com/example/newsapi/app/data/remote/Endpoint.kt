@@ -17,8 +17,8 @@ interface Endpoint {
     fun cadastrarUsuario(@Body jsonObject: JsonObject) : Call<CadastroRetorno>
 
     @Headers( "Content-Type: application/json;charset=UTF-8")
-    @GET("v1/client/news?current_page=&per_page=&published_at=")
-    fun buscarNoticias(@Header("Authorization") token: String) : Call<NoticiasRetorno>
+    @GET("v1/client/news")
+    fun buscarNoticias(@Header("Authorization") token: String, @Query( "current_page" ) pagina :  Int ) : Call<NoticiasRetorno>
 
     @Headers( "Content-Type: application/json;charset=UTF-8")
     @GET("v1/client/news/highlights")
